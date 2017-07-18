@@ -36,7 +36,7 @@ def get_character_movies_from_api(character)
     end
     
     if film_link_array == []
-        puts "\nSorry, we don't have information on that character."
+        puts "Sorry, we don't have information on that character."
         
     end
     
