@@ -5,8 +5,8 @@ require 'pry'
 
 
 # make the web request
-def get_character_hash
-    all_characters = RestClient.get('http://www.swapi.co/api/people/')
+def get_character_hash(link)
+    all_characters = RestClient.get(link)
     character_hash = JSON.parse(all_characters)
 end
 
@@ -21,18 +21,31 @@ def get_film_info(film_link_array)
     end
 end
 
-
-
-def get_character_movies_from_api(character)
+def iterate_over_page (character_hash, character)
     film_link_array = []
-    
-    get_character_hash["results"].each do |each_character|
+    # iterate over results on given page
+    character_hash["results"].each do |each_character|
         # iterate over the character hash to find the collection of `films` for the given
         #   `character`
         if each_character["name"].downcase.include?(character)
             film_link_array = each_character["films"]
             puts "\nYou searched for: #{each_character["name"]},\nwho appears in the following Star Wars Films:\n\n"
         end
+    end
+    #puts film_link_array
+    film_link_array
+end
+
+
+
+def get_character_movies_from_api(character)
+    film_link_array = []
+    character_hash = get_character_hash('http://www.swapi.co/api/people/')
+    
+    while film_link_array == [] && character_hash["next"]
+        film_link_array = iterate_over_page(character_hash, character)
+        character_hash = get_character_hash(character_hash["next"])
+        
     end
     
     if film_link_array == []
