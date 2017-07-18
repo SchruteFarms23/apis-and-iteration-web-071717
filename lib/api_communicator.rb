@@ -24,7 +24,7 @@ def get_character_movies_from_api(character)
       puts "You searched for: #{each_character["name"]}"
     end
   end
-
+  #nice
 
 
   # collect those film API urls, make a web request to each URL to get the info
